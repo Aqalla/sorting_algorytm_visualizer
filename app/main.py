@@ -1,15 +1,25 @@
 from fastapi import FastAPI
 import uvicorn 
 
+from app.routes import router as main_router
+from app.models import Base, engine
 
-app = FastAPI(title='BIG Bro algorythm visualizer')
+
+async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+
+
+app = FastAPI(title='BIG Bro algorithm visualizer', lifespan=lifespan)
+
+app.include_router(main_router)
 
 
 @app.get('/health-check')
-async def health():
+async def health(): 
     return {
         'status': 'OK',
-        'message': 'YA jiv!!!'
     }
 
 
