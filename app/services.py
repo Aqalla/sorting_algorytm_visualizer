@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models import User, UserArrayConfiguration
-from app.schemas import UserCreateRequest, UpdateUserSettingsRequest
+from app.schemas import UserCreateRequest, UpdateUserSettingsRequest, UserLoginRequest, UserLoginResponse
 from app.queries import (
     get_user_by_email, get_user_settings
 )
@@ -25,6 +25,17 @@ async def save_user(data: UserCreateRequest, db: AsyncSession) -> int:
     
     await save_user_settings(user_id = user.id, db=db)
     return user.id 
+
+
+async def login_user(data: UserLoginRequest, db: AsyncSession) -> int:
+    user: User = await get_user_by_email(email=data.email, db=db)
+    
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail='Пользователь с таким email не найден'
+        )   
+    return user.id
 
 
 async def save_user_settings(user_id: int, db: AsyncSession) -> UserArrayConfiguration:
