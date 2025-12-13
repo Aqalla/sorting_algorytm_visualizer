@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware 
-import uvicorn 
 
 from app.routes import router as main_router
 from app.models import Base, engine
@@ -13,8 +12,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title='BIG Bro algorithm visualizer', lifespan=lifespan)
-
-origins = ['185.117.151.123']
 
 app.add_middleware(
     CORSMiddleware,
@@ -33,11 +30,3 @@ async def health():
         'status': 'OK',
     }
 
-
-if __name__ == '__main__':
-    uvicorn.run(
-        app='app.main:app',
-        host='0.0.0.0',
-        port=8000,
-        reload=True
-    )
