@@ -3,13 +3,15 @@ from app.database import get_session
 from app.schemas import (
     UserCreateRequest,
     UserCreateResponse,
+    UserLoginRequest,
+    UserLoginResponse,
     GetUserSettingsResponse, 
     UpdateUserSettingsRequest,
     UpdateUserSettingsResponse
 )
 
 from app.services import (
-    save_user, get_user_settings_service, update_user_settings_service
+    save_user, login_user, get_user_settings_service, update_user_settings_service
 )
 
 
@@ -23,6 +25,15 @@ async def create_user(
         db = Depends(get_session)):
     user_id = await save_user(data=data, db=db)
     return UserCreateResponse(user_id=user_id)
+
+
+@router.post('/users/login', name='Авторизация пользователя', response_model=UserLoginResponse)
+async def login(
+    data: UserLoginRequest,
+    db = Depends(get_session)
+):
+    user_id = await login_user(data=data, db=db)
+    return UserLoginResponse(user_id=user_id)
 
 
 @router.get('/users/settings', name='Получение настроек пользователя', response_model=GetUserSettingsResponse)
