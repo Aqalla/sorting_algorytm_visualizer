@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Play, Pause, RotateCcw, Shuffle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { bubbleSort, quickSort, insertionSort, type SortStep, type AlgorithmType, algorithms } from "@/algorithms";
+import { bubbleSort, quickSort, insertionSort, selectionSort, type SortStep, type AlgorithmType, algorithms } from "@/algorithms";
 import type { UserSettings } from "@/lib/api";
 
 interface SortingVisualizerProps {
@@ -71,6 +71,8 @@ export function SortingVisualizer({ settings, selectedAlgorithm }: SortingVisual
         return quickSort(arr);
       case "insertion":
         return insertionSort(arr);
+      case "selection":
+        return selectionSort(arr);
       default:
         return bubbleSort(arr);
     }
