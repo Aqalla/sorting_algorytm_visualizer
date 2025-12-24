@@ -43,9 +43,9 @@ function App() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-background">
+      <div className="h-screen w-screen bg-background flex flex-col">
         <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="container mx-auto flex h-14 items-center justify-between gap-4 px-4">
+          <div className="flex h-14 items-center justify-between gap-4 px-4">
             <div className="flex items-center gap-3">
               <div className="w-6 h-6 rounded-sm bg-primary" />
               <h1 className="text-lg font-semibold">Algorithm Visualizer</h1>
@@ -54,9 +54,9 @@ function App() {
           </div>
         </header>
 
-        <main className="container mx-auto p-4 md:p-6 lg:p-8">
-          <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-            <aside className="lg:sticky lg:top-20 lg:self-start">
+        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto lg:overflow-hidden">
+          <div className="grid gap-6 lg:h-full lg:grid-cols-[320px_1fr]">
+            <aside className="lg:h-full lg:overflow-auto">
               <SettingsPanel
                 userId={userId}
                 selectedAlgorithm={selectedAlgorithm}
@@ -65,7 +65,7 @@ function App() {
                 onLogout={handleLogout}
               />
             </aside>
-            <div className="min-h-[500px]">
+            <div className="lg:h-full lg:min-h-0">
               <SortingVisualizer settings={settings} selectedAlgorithm={selectedAlgorithm} />
             </div>
           </div>

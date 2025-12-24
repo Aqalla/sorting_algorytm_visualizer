@@ -31,6 +31,7 @@ export function SortingVisualizer({ settings, selectedAlgorithm }: SortingVisual
   }, [steps, currentStep, baseArray]);
 
   const maxValue = useMemo(() => Math.max(...currentDisplay.array, 100), [currentDisplay.array]);
+  const showValues = currentDisplay.array.length <= 100;
 
   const clearTimer = useCallback(() => {
     if (timeoutRef.current) {
@@ -194,11 +195,12 @@ export function SortingVisualizer({ settings, selectedAlgorithm }: SortingVisual
             const isActive = currentDisplay.active.includes(index);
             const isSorted = currentDisplay.sorted.includes(index);
             const heightPercent = (value / maxValue) * 100;
+            const labelIsInsideBar = heightPercent >= 15;
 
             return (
               <div
                 key={index}
-                className={`flex-1 max-w-8 rounded-t-sm transition-all duration-75 ${
+                className={`relative flex-1 max-w-8 rounded-t-sm transition-all duration-75 ${
                   isActive
                     ? "bg-primary"
                     : isSorted
@@ -211,7 +213,18 @@ export function SortingVisualizer({ settings, selectedAlgorithm }: SortingVisual
                 }}
                 data-testid={`bar-${index}`}
                 aria-label={`Bar ${index + 1}: value ${value}${isActive ? ', being compared' : ''}${isSorted ? ', sorted' : ''}`}
-              />
+              >
+                {showValues && (
+                  <span
+                    className={`pointer-events-none select-none absolute left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-mono leading-none drop-shadow-sm ${
+                      labelIsInsideBar ? "top-1" : "-top-4"
+                    } ${labelIsInsideBar && (isActive || isSorted) ? "text-background" : "text-foreground"}`}
+                    data-testid={`bar-value-${index}`}
+                  >
+                    {value}
+                  </span>
+                )}
+              </div>
             );
           })}
         </div>
